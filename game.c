@@ -58,6 +58,12 @@ void setMines(int board[],int w,int h,int numMines) {
 }
 
 void printBoard(int board[],int w,int h,int cx,int cy,int x,int y, bool showMines) {
+	CONSOLE_CURSOR_INFO cci;
+
+	cci.dwSize=99;
+	cci.bVisible=FALSE;
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE),&cci);
+
 	for(int j=0;j<h;j++) {
 		for(int i=0;i<w;i++) {
 			gotoxy(cx+i+1,cy+j+1);
@@ -88,6 +94,11 @@ void printBoard(int board[],int w,int h,int cx,int cy,int x,int y, bool showMine
 	}
 	textattr(FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
 	printf("\n");
+
+	cci.dwSize=99;
+	cci.bVisible=TRUE;
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE),&cci);
+
 }
 
 bool valid(int w,int h,int x,int y) {
