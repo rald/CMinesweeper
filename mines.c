@@ -151,6 +151,10 @@ int main(void) {
 	bool quit=false;
 	int key;
 
+  time_t starttime,endtime;
+  int elapsedtime;
+  BOOL firsttime=TRUE;
+
 	srand(time(NULL));
 
 	for(int i=0;i<w*h;i++) flags[i]=false;
@@ -166,20 +170,28 @@ int main(void) {
 	clrscr();
 	printBoard(board,w,h,0,0,x,y,false);
 
+
 	while(!quit) {
 		gotoxy(x+1,y+1);
 		key=getch();
 		if(key==0 || key==224) key=getch()+256;
 		switch(key) {
 			case ESC_KEY: clrscr(); quit=true; break;
-			case ENT_KEY: 
+			case ENT_KEY:
+                                if(firsttime) {
+                                  firsttime=FALSE;
+                                  starttime=time(NULL);
+                                }
 				if(board[y*w+x]==MINE) {
 					printBoard(board,w,h,0,0,x,y,true);
 					quit=true;
 				} else if(board[y*w+x]==NONE) {
 					sweep(board,w,h,x,y,flags,&numOpen); 
 					if(numOpen==numGoals) {
+					        endtime=time(NULL);
 						printBoard(board,w,h,0,0,x,y,true);
+						elapsedtime=(int)difftime(endtime,starttime);
+						printf("Time: %dm:%ds\n",elapsedtime/60,elapsedtime%60);
 						printf("Finished!\n");
 						quit=true;
 					} else {
